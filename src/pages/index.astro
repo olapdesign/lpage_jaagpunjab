@@ -130,6 +130,17 @@
 				will-change: opacity;
 			}
 
+			/* Invisible rest slot — used to aim the active translate at the viewport. */
+			.hero-syringe-anchor {
+				position: absolute;
+				right: var(--syringe-right);
+				bottom: var(--syringe-bottom);
+				width: var(--syringe-width);
+				aspect-ratio: 1146 / 219;
+				visibility: hidden;
+				pointer-events: none;
+			}
+
 			/* Same stage coordinate space as the art — always stays locked. */
 			.hero-syringe {
 				position: absolute;
@@ -138,14 +149,17 @@
 				z-index: 4;
 				width: var(--syringe-width);
 				height: auto;
-				transform: rotate(0deg) scale(1);
-				transform-origin: center center;
+				--syringe-dx: 0px;
+				--syringe-dy: 0px;
+				transform: translate(0px, 0px) rotate(0deg) scale(1);
+				/* Pivot on the needle (left end). */
+				transform-origin: 60% 0%;
 				transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 				will-change: transform;
 			}
 
 			.hero-syringe.is-active {
-				transform: rotate(142deg) scale(8);
+				transform: translate(var(--syringe-dx), var(--syringe-dy)) rotate(142deg) scale(8);
 			}
 
 			.bottom-section {
@@ -179,12 +193,14 @@
 			<div class="hero-stage">
 				<img class="hero-art hero-art--fast" src="images/l02.png" alt="" />
 				<img class="hero-art hero-art--mid" src="images/l03.png" alt="" />
+				<div class="hero-syringe-anchor" aria-hidden="true"></div>
 				<img class="hero-syringe" src="images/l04.png" alt="" />
 			</div>
 		</div>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
 			const syringe = document.querySelector(".hero-syringe");
+			const syringeAnchor = document.querySelector(".hero-syringe-anchor");
 			const root = document.documentElement;
 			const SYRINGE_TRIGGER_PX = 300;
 
@@ -199,8 +215,24 @@
 				root.style.setProperty("--hero-opacity-fast", String(opacityFast));
 			}
 
+			function updateSyringeTravel() {
+				if (!(syringe instanceof HTMLElement)) return;
+				if (!(syringeAnchor instanceof HTMLElement)) return;
+
+				const rect = syringeAnchor.getBoundingClientRect();
+				// Needle sits on the left end of the asset.
+				const needleX = rect.left;
+				const needleY = rect.top + rect.height / 2;
+				const targetX = 0;
+				const targetY = window.innerHeight;
+
+				syringe.style.setProperty("--syringe-dx", `${targetX - needleX}px`);
+				syringe.style.setProperty("--syringe-dy", `${targetY - needleY}px`);
+			}
+
 			function updateSyringe(top: number) {
 				if (!(syringe instanceof HTMLElement)) return;
+				updateSyringeTravel();
 				syringe.classList.toggle("is-active", top <= SYRINGE_TRIGGER_PX);
 			}
 
