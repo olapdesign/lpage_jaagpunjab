@@ -38,7 +38,7 @@
 			body {
 				display: flex;
 				flex-direction: column;
-				min-height: 100dvh;
+				min-height: calc(100dvh + 100dvh);
 				background-color: var(--bg);
 				color: #e8eaed;
 				font-family: Georgia, "Times New Roman", serif;
@@ -106,7 +106,7 @@
 				z-index: 2;
 				margin-top: auto;
 				width: 100%;
-				min-height: clamp(8rem, 24vh, 14rem);
+				min-height: calc(clamp(8rem, 24vh, 14rem) + 100dvh);
 				background-color: #ff0000;
 			}
 
