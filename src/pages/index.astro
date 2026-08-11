@@ -78,6 +78,33 @@
 				color: #ff0000;
 			}
 
+			.reveal-title-container {
+				position: fixed;
+				inset: 0;
+				z-index: 5;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0 1rem;
+				pointer-events: none;
+				opacity: 0;
+				transition: opacity 0.45s ease;
+			}
+
+			.reveal-title-container.is-visible {
+				opacity: 1;
+			}
+
+			.reveal-title {
+				margin: 0;
+				max-width: 450px;
+				font-family: "Anton SC", sans-serif;
+				font-size: clamp(3.5rem, 8vw + 2rem, 6rem);
+				font-weight: 400;
+				line-height: 0.9;
+				color: #000000;
+			}
+
 			/* Full-bleed fixed layer; art lives in the centered stage. */
 			.hero-stack {
 				position: fixed;
@@ -173,7 +200,8 @@
 			}
 
 			@media (max-width: 640px) {
-				.title {
+				.title,
+				.reveal-title {
 					font-size: clamp(3rem, 12vw + 1rem, 4.5rem);
 				}
 			}
@@ -182,6 +210,9 @@
 	<body>
 		<div class="title-container">
 			<h1 class="title">we have a problem</h1>
+		</div>
+		<div class="reveal-title-container" aria-hidden="true">
+			<p class="reveal-title">jaag punjab</p>
 		</div>
 		<div class="hero-stack hero-stack--back">
 			<div class="hero-stage">
@@ -201,6 +232,7 @@
 			const bottomSection = document.querySelector(".bottom-section");
 			const syringe = document.querySelector(".hero-syringe");
 			const syringeAnchor = document.querySelector(".hero-syringe-anchor");
+			const revealTitle = document.querySelector(".reveal-title-container");
 			const root = document.documentElement;
 			const SYRINGE_TRIGGER_PX = 300;
 
@@ -230,10 +262,20 @@
 				syringe.style.setProperty("--syringe-dy", `${targetY - needleY}px`);
 			}
 
+			function setRevealVisible(visible: boolean) {
+				if (!(revealTitle instanceof HTMLElement)) return;
+				revealTitle.classList.toggle("is-visible", visible);
+				revealTitle.setAttribute("aria-hidden", visible ? "false" : "true");
+			}
+
 			function updateSyringe(top: number) {
 				if (!(syringe instanceof HTMLElement)) return;
 				updateSyringeTravel();
-				syringe.classList.toggle("is-active", top <= SYRINGE_TRIGGER_PX);
+				const shouldActive = top <= SYRINGE_TRIGGER_PX;
+				const wasActive = syringe.classList.contains("is-active");
+				syringe.classList.toggle("is-active", shouldActive);
+				// Hide as soon as the reverse trip starts.
+				if (wasActive && !shouldActive) setRevealVisible(false);
 			}
 
 			function updateOnScrollOrResize() {
@@ -250,6 +292,15 @@
 				requestAnimationFrame(() => {
 					updateOnScrollOrResize();
 					ticking = false;
+				});
+			}
+
+			if (syringe instanceof HTMLElement) {
+				syringe.addEventListener("transitionend", (event) => {
+					if (!(event instanceof TransitionEvent)) return;
+					if (event.propertyName !== "transform") return;
+					if (event.target !== syringe) return;
+					if (syringe.classList.contains("is-active")) setRevealVisible(true);
 				});
 			}
 
