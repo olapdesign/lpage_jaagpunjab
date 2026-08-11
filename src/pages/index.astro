@@ -70,6 +70,8 @@
 				width: 100%;
 				max-height: 90vh;
 				pointer-events: none;
+				opacity: var(--hero-opacity, 1);
+				will-change: opacity;
 			}
 
 			.hero-stack--back {
@@ -129,5 +131,34 @@
 			<img src="images/l02.png" alt="" />
 			<img src="images/l03.png" alt="" />
 		</div>
+		<script>
+			const bottomSection = document.querySelector(".bottom-section");
+			const root = document.documentElement;
+
+			function updateHeroFade() {
+				if (!(bottomSection instanceof HTMLElement)) return;
+
+				const { top } = bottomSection.getBoundingClientRect();
+				// Fully visible until the red band climbs into the upper half,
+				// then fade to 0 as its top edge reaches the top of the page.
+				const fadeStart = window.innerHeight * 0.5;
+				const opacity = Math.min(1, Math.max(0, top / fadeStart));
+				root.style.setProperty("--hero-opacity", String(opacity));
+			}
+
+			let ticking = false;
+			function onScrollOrResize() {
+				if (ticking) return;
+				ticking = true;
+				requestAnimationFrame(() => {
+					updateHeroFade();
+					ticking = false;
+				});
+			}
+
+			updateHeroFade();
+			window.addEventListener("scroll", onScrollOrResize, { passive: true });
+			window.addEventListener("resize", onScrollOrResize);
+		</script>
 	</body>
 </html>
