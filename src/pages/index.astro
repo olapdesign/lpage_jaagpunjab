@@ -11,6 +11,14 @@
 		<meta name="generator" content={Astro.generator} />
 		<title>We have a problem</title>
 		<style>
+			@font-face {
+				font-family: "Anton SC";
+				src: url("/fonts/Anton_SC/AntonSC-Regular.ttf") format("truetype");
+				font-weight: 400;
+				font-style: normal;
+				font-display: swap;
+			}
+
 			:root {
 				--bg: #000000;
 			}
@@ -33,14 +41,22 @@
 				font-family: Georgia, "Times New Roman", serif;
 			}
 
-			.title {
+			.title-container {
 				position: relative;
 				z-index: 1;
-				margin: 60px 1rem 0;
+				max-width: 450px;
+				margin: 60px auto 0;
+				padding: 0 1rem;
 				text-align: center;
-				font-size: clamp(1.75rem, 4vw + 1rem, 3rem);
-				font-weight: 700;
-				line-height: 1.2;
+			}
+
+			.title {
+				margin: 0;
+				font-family: "Anton SC", sans-serif;
+				font-size: clamp(3.5rem, 8vw + 2rem, 6rem);
+				font-weight: 400;
+				line-height: 0.9;
+				color: #ff0000;
 			}
 
 			.hero-image {
@@ -58,14 +74,15 @@
 
 			@media (max-width: 640px) {
 				.title {
-					margin-top: 60px;
-					font-size: clamp(1.5rem, 6vw + 0.5rem, 2.25rem);
+					font-size: clamp(3rem, 12vw + 1rem, 4.5rem);
 				}
 			}
 		</style>
 	</head>
 	<body>
-		<h1 class="title">We have a problem</h1>
+		<div class="title-container">
+			<h1 class="title">we have a problem</h1>
+		</div>
 		<img
 			class="hero-image"
 			src="images/main-image.png"
