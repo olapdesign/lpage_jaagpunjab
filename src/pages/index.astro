@@ -50,14 +50,19 @@
 			}
 
 			body {
-				display: flex;
-				flex-direction: column;
-				/* Extra length matches .bottom-section so margin-top: auto
-				   keeps the same first-viewport pin while red continues below. */
-				min-height: calc(100dvh + var(--below-fold));
 				background-color: var(--bg);
 				color: #e8eaed;
 				font-family: Georgia, "Times New Roman", serif;
+			}
+
+			/*
+			 * Isolates the scroll story so later sections don't steal the
+			 * free space that margin-top: auto needs for the first-viewport pin.
+			 */
+			.story {
+				display: flex;
+				flex-direction: column;
+				min-height: calc(100dvh + var(--below-fold));
 			}
 
 			.title-container {
@@ -201,6 +206,15 @@
 				background-color: #ff0000;
 			}
 
+			.after-section {
+				position: relative;
+				/* Above fixed hero layers so black cleanly replaces the scroll story. */
+				z-index: 6;
+				width: 100%;
+				min-height: 100dvh;
+				background-color: #000000;
+			}
+
 			@media (max-width: 1040px) {
 				.title,
 				.reveal-title {
@@ -223,26 +237,29 @@
 		</style>
 	</head>
 	<body>
-		<div class="title-container">
-			<h1 class="title">we have a problem</h1>
-		</div>
-		<div class="reveal-title-container" aria-hidden="true">
-			<p class="reveal-title">7 out of 10 college-going students are into drug abuse in Punjab</p>
-		</div>
-		<div class="hero-stack hero-stack--back">
-			<div class="hero-stage">
-				<img class="hero-art" src="images/l01.png" alt="" />
+		<div class="story">
+			<div class="title-container">
+				<h1 class="title">we have a problem</h1>
+			</div>
+			<div class="reveal-title-container" aria-hidden="true">
+				<p class="reveal-title">7 out of 10 college-going students are into drug abuse in Punjab</p>
+			</div>
+			<div class="hero-stack hero-stack--back">
+				<div class="hero-stage">
+					<img class="hero-art" src="images/l01.png" alt="" />
+				</div>
+			</div>
+			<section class="bottom-section" aria-hidden="true"></section>
+			<div class="hero-stack hero-stack--front">
+				<div class="hero-stage">
+					<img class="hero-art hero-art--fast" src="images/l02.png" alt="" />
+					<img class="hero-art hero-art--mid" src="images/l03.png" alt="" />
+					<div class="hero-syringe-anchor" aria-hidden="true"></div>
+					<img class="hero-syringe" src="images/l04.png" alt="" />
+				</div>
 			</div>
 		</div>
-		<section class="bottom-section" aria-hidden="true"></section>
-		<div class="hero-stack hero-stack--front">
-			<div class="hero-stage">
-				<img class="hero-art hero-art--fast" src="images/l02.png" alt="" />
-				<img class="hero-art hero-art--mid" src="images/l03.png" alt="" />
-				<div class="hero-syringe-anchor" aria-hidden="true"></div>
-				<img class="hero-syringe" src="images/l04.png" alt="" />
-			</div>
-		</div>
+		<section class="after-section" aria-hidden="true"></section>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
 			const syringe = document.querySelector(".hero-syringe");
