@@ -80,6 +80,7 @@
 
 			.hero-stack--front {
 				z-index: 3;
+				opacity: 1;
 			}
 
 			.hero-stack img {
@@ -94,6 +95,8 @@
 			.hero-stack--front img:nth-child(1) {
 				position: relative;
 				z-index: 1;
+				opacity: var(--hero-opacity-fast, 1);
+				will-change: opacity;
 			}
 
 			.hero-stack--front img:nth-child(2) {
@@ -101,6 +104,8 @@
 				left: 0;
 				bottom: 0;
 				z-index: 2;
+				opacity: var(--hero-opacity, 1);
+				will-change: opacity;
 			}
 
 			.bottom-section {
@@ -143,7 +148,10 @@
 				// then fade to 0 as its top edge reaches the top of the page.
 				const fadeStart = window.innerHeight * 0.5;
 				const opacity = Math.min(1, Math.max(0, top / fadeStart));
+				// l02 fades twice as fast — gone when the others are halfway.
+				const opacityFast = Math.min(1, Math.max(0, 2 * opacity - 1));
 				root.style.setProperty("--hero-opacity", String(opacity));
+				root.style.setProperty("--hero-opacity-fast", String(opacityFast));
 			}
 
 			let ticking = false;
