@@ -201,10 +201,23 @@
 				background-color: #ff0000;
 			}
 
-			@media (max-width: 640px) {
+			@media (max-width: 1040px) {
 				.title,
 				.reveal-title {
 					font-size: clamp(3rem, 12vw + 1rem, 4.5rem);
+				}
+
+				.reveal-title-container {
+					align-items: flex-start;
+					justify-content: center;
+					padding: 200px 100px 0;
+				}
+
+				.reveal-title {
+					margin-left: 0;
+					max-width: none;
+					width: 100%;
+					text-align: center;
 				}
 			}
 		</style>
