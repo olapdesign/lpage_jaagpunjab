@@ -22,9 +22,19 @@
 			:root {
 				--bg: #000000;
 				/* Hero art 3000×2628; opaque desk band is ~706px tall from the bottom. */
-				--hero-render-height: min(100vw * 2628 / 3000, 90vh);
-				--band-visible: calc(var(--hero-render-height) * 706 / 2628);
+				--hero-w: 3000;
+				--hero-h: 2628;
+				--hero-band: 706;
+				--hero-render-height: min(100vw * var(--hero-h) / var(--hero-w), 90vh);
+				--band-visible: calc(var(--hero-render-height) * var(--hero-band) / var(--hero-h));
 				--below-fold: 100dvh;
+				/*
+				 * Syringe placement as fractions of the hero stage.
+				 * Tuned from ~140×180×140 on a ~1400px-wide hero.
+				 */
+				--syringe-width: 10%;
+				--syringe-right: 12.85%;
+				--syringe-bottom: 12%;
 			}
 
 			*,
@@ -68,20 +78,19 @@
 				color: #ff0000;
 			}
 
+			/* Full-bleed fixed layer; art lives in the centered stage. */
 			.hero-stack {
 				position: fixed;
 				left: 0;
 				right: 0;
 				bottom: 0;
-				width: 100%;
-				max-height: 90vh;
+				z-index: 1;
+				display: flex;
+				justify-content: center;
+				align-items: flex-end;
 				pointer-events: none;
 				opacity: var(--hero-opacity, 1);
 				will-change: opacity;
-			}
-
-			.hero-stack--back {
-				z-index: 1;
 			}
 
 			.hero-stack--front {
@@ -89,29 +98,46 @@
 				opacity: 1;
 			}
 
-			.hero-stack img {
-				display: block;
-				width: 100%;
-				height: auto;
+			/*
+			 * Single source of truth for hero size.
+			 * Width-capped by viewport; height-capped at 90vh via max-height + aspect-ratio.
+			 */
+			.hero-stage {
+				position: relative;
+				width: min(100vw, calc(90vh * var(--hero-w) / var(--hero-h)));
 				max-height: 90vh;
-				object-fit: contain;
-				object-position: bottom center;
+				aspect-ratio: var(--hero-w) / var(--hero-h);
 			}
 
-			.hero-stack--front img:nth-child(1) {
-				position: relative;
+			.hero-art {
+				position: absolute;
+				inset: 0;
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: fill;
+			}
+
+			.hero-art--fast {
 				z-index: 1;
 				opacity: var(--hero-opacity-fast, 1);
 				will-change: opacity;
 			}
 
-			.hero-stack--front img:nth-child(2) {
-				position: absolute;
-				left: 0;
-				bottom: 0;
+			.hero-art--mid {
 				z-index: 2;
 				opacity: var(--hero-opacity, 1);
 				will-change: opacity;
+			}
+
+			/* Same stage coordinate space as the art — always stays locked. */
+			.hero-syringe {
+				position: absolute;
+				right: var(--syringe-right);
+				bottom: var(--syringe-bottom);
+				z-index: 4;
+				width: var(--syringe-width);
+				height: auto;
 			}
 
 			.bottom-section {
@@ -122,16 +148,6 @@
 				/* Visible peek tracks hero width; + below-fold keeps scroll room. */
 				min-height: calc(var(--band-visible) + var(--below-fold));
 				background-color: #ff0000;
-			}
-
-			.hero-syringe {
-				position: fixed;
-				right: 180px;
-				bottom: 140px;
-				z-index: 4;
-				width: 140px;
-				height: auto;
-				pointer-events: none;
 			}
 
 			@media (max-width: 640px) {
@@ -146,14 +162,18 @@
 			<h1 class="title">we have a problem</h1>
 		</div>
 		<div class="hero-stack hero-stack--back">
-			<img src="images/l01.png" alt="" />
+			<div class="hero-stage">
+				<img class="hero-art" src="images/l01.png" alt="" />
+			</div>
 		</div>
 		<section class="bottom-section" aria-hidden="true"></section>
 		<div class="hero-stack hero-stack--front">
-			<img src="images/l02.png" alt="" />
-			<img src="images/l03.png" alt="" />
+			<div class="hero-stage">
+				<img class="hero-art hero-art--fast" src="images/l02.png" alt="" />
+				<img class="hero-art hero-art--mid" src="images/l03.png" alt="" />
+				<img class="hero-syringe" src="images/l04.png" alt="" />
+			</div>
 		</div>
-		<img class="hero-syringe" src="images/l04.png" alt="" width="200" />
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
 			const root = document.documentElement;
