@@ -124,6 +124,16 @@
 				background-color: #ff0000;
 			}
 
+			.hero-syringe {
+				position: fixed;
+				right: 180px;
+				bottom: 140px;
+				z-index: 4;
+				width: 140px;
+				height: auto;
+				pointer-events: none;
+			}
+
 			@media (max-width: 640px) {
 				.title {
 					font-size: clamp(3rem, 12vw + 1rem, 4.5rem);
@@ -143,6 +153,7 @@
 			<img src="images/l02.png" alt="" />
 			<img src="images/l03.png" alt="" />
 		</div>
+		<img class="hero-syringe" src="images/l04.png" alt="" width="200" />
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
 			const root = document.documentElement;
