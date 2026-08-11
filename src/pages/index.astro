@@ -211,11 +211,13 @@
 				/* Above fixed hero layers so black cleanly replaces the scroll story. */
 				z-index: 6;
 				display: flex;
+				flex-direction: column;
 				align-items: center;
 				justify-content: center;
+				gap: 2.5rem;
 				width: 100%;
 				min-height: 100dvh;
-				padding: 0 1rem;
+				padding: 3rem 1rem;
 				background-color: #000000;
 				text-align: center;
 			}
@@ -228,6 +230,18 @@
 				font-weight: 400;
 				line-height: 0.9;
 				color: #ffffff;
+			}
+
+			.after-video {
+				width: min(100%, 720px);
+				aspect-ratio: 16 / 9;
+			}
+
+			.after-video iframe {
+				display: block;
+				width: 100%;
+				height: 100%;
+				border: 0;
 			}
 
 			@media (max-width: 1040px) {
@@ -277,6 +291,15 @@
 		</div>
 		<section class="after-section">
 			<h2 class="after-title">we still have hope</h2>
+			<div class="after-video">
+				<iframe
+					src="https://www.youtube.com/embed/g9Gn7R7XKfw"
+					title="YouTube video"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					referrerpolicy="strict-origin-when-cross-origin"
+					allowfullscreen
+				></iframe>
+			</div>
 		</section>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
