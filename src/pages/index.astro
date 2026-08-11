@@ -36,6 +36,9 @@
 			}
 
 			body {
+				display: flex;
+				flex-direction: column;
+				min-height: 100dvh;
 				background-color: var(--bg);
 				color: #e8eaed;
 				font-family: Georgia, "Times New Roman", serif;
@@ -66,15 +69,29 @@
 				transform: translate(-50%, -50%);
 				width: 100%;
 				height: auto;
-				max-height: 100vh;
+				max-height: 70vh;
 				object-fit: contain;
 				display: block;
 				pointer-events: none;
 			}
 
+			.bottom-section {
+				position: relative;
+				z-index: 2;
+				margin-top: auto;
+				width: 100%;
+				min-height: clamp(8rem, 18vh, 14rem);
+				background-color: #ff0000;
+				clip-path: polygon(0 1.75rem, 100% 0, 100% 100%, 0 100%);
+			}
+
 			@media (max-width: 640px) {
 				.title {
 					font-size: clamp(3rem, 12vw + 1rem, 4.5rem);
+				}
+
+				.bottom-section {
+					clip-path: polygon(0 1.25rem, 100% 0, 100% 100%, 0 100%);
 				}
 			}
 		</style>
@@ -85,8 +102,9 @@
 		</div>
 		<img
 			class="hero-image"
-			src="images/main-image.png"
+			src="images/man.png"
 			alt=""
 		/>
+		<section class="bottom-section" aria-hidden="true"></section>
 	</body>
 </html>
