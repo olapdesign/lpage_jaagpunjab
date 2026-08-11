@@ -21,6 +21,10 @@
 
 			:root {
 				--bg: #000000;
+				/* Hero art 3000×2628; opaque desk band is ~706px tall from the bottom. */
+				--hero-render-height: min(100vw * 2628 / 3000, 90vh);
+				--band-visible: calc(var(--hero-render-height) * 706 / 2628);
+				--below-fold: 100dvh;
 			}
 
 			*,
@@ -38,7 +42,9 @@
 			body {
 				display: flex;
 				flex-direction: column;
-				min-height: calc(100dvh + 100dvh);
+				/* Extra length matches .bottom-section so margin-top: auto
+				   keeps the same first-viewport pin while red continues below. */
+				min-height: calc(100dvh + var(--below-fold));
 				background-color: var(--bg);
 				color: #e8eaed;
 				font-family: Georgia, "Times New Roman", serif;
@@ -113,7 +119,8 @@
 				z-index: 2;
 				margin-top: auto;
 				width: 100%;
-				min-height: calc(24vh + 100dvh);
+				/* Visible peek tracks hero width; + below-fold keeps scroll room. */
+				min-height: calc(var(--band-visible) + var(--below-fold));
 				background-color: #ff0000;
 			}
 
