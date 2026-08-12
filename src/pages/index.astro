@@ -360,6 +360,13 @@
 				text-align: center;
 			}
 
+			.after-title-block {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
 			.after-title {
 				margin: 0;
 				max-width: 450px;
@@ -368,6 +375,16 @@
 				font-weight: 400;
 				line-height: 0.9;
 				color: #000000;
+			}
+
+			.after-subtitle {
+				margin: 0;
+				max-width: 450px;
+				font-family: "Anton SC", sans-serif;
+				font-size: clamp(0.75rem, 2vw + 1rem, 1.5rem);
+				font-weight: 700;
+				line-height: 0.9;
+				color: #ff0000;
 			}
 
 			.after-video {
@@ -474,7 +491,10 @@
 					allowfullscreen
 				></iframe>
 			</div>
-			<h2 class="after-title scroll-fade" aria-hidden="true">we still have hope...</h2>
+			<div class="after-title-block scroll-fade" aria-hidden="true">
+				<h2 class="after-title">we still have hope...</h2>
+				<p class="after-subtitle">ਜਾਗ ਪੰਜਾਬ</p>
+			</div>
 		</section>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
