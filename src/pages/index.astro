@@ -360,6 +360,8 @@
 			.after-video {
 				width: min(100%, 720px);
 				aspect-ratio: 16 / 9;
+				border-radius: 4px;
+				overflow: hidden; /* ensures iframe corners are clipped */
 			}
 
 			.after-video iframe {
@@ -367,6 +369,7 @@
 				width: 100%;
 				height: 100%;
 				border: 0;
+				border-radius: 4px;
 			}
 
 			.white-text-section {
@@ -446,7 +449,7 @@
 		</section>
 
 		<section class="after-section">
-			<h2 class="after-title">we still have hope</h2>
+			<h2 class="after-title">HEAR THE STORIES OF LIVES AFFECTED BY THIS VICE</h2>
 			<div class="after-video">
 				<iframe
 					src="https://www.youtube.com/embed/g9Gn7R7XKfw"
@@ -456,6 +459,7 @@
 					allowfullscreen
 				></iframe>
 			</div>
+			<h2 class="after-title">we still have hope...</h2>
 		</section>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
