@@ -182,7 +182,6 @@
 				bottom: var(--syringe-bottom);
 				z-index: 4;
 				width: var(--syringe-width);
-				height: auto;
 				--syringe-dx: 0px;
 				--syringe-dy: 0px;
 				transform: translate(0px, 0px) rotate(0deg) scale(1);
@@ -194,6 +193,107 @@
 
 			.hero-syringe.is-active {
 				transform: translate(var(--syringe-dx), var(--syringe-dy)) rotate(142deg) scale(8);
+			}
+
+			.hero-syringe-img {
+				display: block;
+				width: 100%;
+				height: auto;
+			}
+
+			/* Needle tip — left end, vertically centered on the asset. */
+			.hero-syringe-drip {
+				position: absolute;
+				left: 0;
+				top: 60%;
+				width: 0;
+				height: 0;
+				pointer-events: none;
+				rotate: 232deg;
+			}
+
+			.hero-syringe-drip::before,
+			.hero-syringe-drip::after {
+				content: "";
+				position: absolute;
+				left: 0;
+				top: 0;
+				background: #9b0f1a;
+				border-radius: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			/* Bead forming at the needle tip. */
+			.hero-syringe-drip::before {
+				width: 5px;
+				height: 7px;
+				border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
+				opacity: 0;
+				animation: none;
+			}
+
+			/* Detached drop falling away. */
+			.hero-syringe-drip::after {
+				width: 4px;
+				height: 5px;
+				opacity: 0;
+				animation: none;
+			}
+
+			.hero-syringe.is-dripping .hero-syringe-drip::before {
+				animation: syringe-drip-bead 2.6s ease-in-out infinite;
+			}
+
+			.hero-syringe.is-dripping .hero-syringe-drip::after {
+				animation: syringe-drip-fall 2.6s ease-in infinite;
+			}
+
+			@keyframes syringe-drip-bead {
+				0%,
+				8% {
+					opacity: 0;
+					transform: translate(-50%, -50%) scale(0.4);
+				}
+
+				18%,
+				52% {
+					opacity: 1;
+					transform: translate(-50%, -50%) scale(1);
+				}
+
+				58% {
+					opacity: 1;
+					transform: translate(-50%, -40%) scale(1.15, 1.25);
+				}
+
+				64%,
+				100% {
+					opacity: 0;
+					transform: translate(-50%, -50%) scale(0.2);
+				}
+			}
+
+			@keyframes syringe-drip-fall {
+				0%,
+				60% {
+					opacity: 0;
+					transform: translate(-50%, -50%) scale(0.6);
+				}
+
+				64% {
+					opacity: 1;
+					transform: translate(-50%, -30%) scale(1);
+				}
+
+				82% {
+					opacity: 0.75;
+					transform: translate(-50%, calc(-30% + 2.8em)) scale(0.95, 1.1);
+				}
+
+				100% {
+					opacity: 0;
+					transform: translate(-50%, calc(-30% + 4.5em)) scale(0.85, 1.2);
+				}
 			}
 
 			.bottom-section {
@@ -284,7 +384,10 @@
 					<img class="hero-art hero-art--fast" src="images/l02.png" alt="" />
 					<img class="hero-art hero-art--mid" src="images/l03.png" alt="" />
 					<div class="hero-syringe-anchor" aria-hidden="true"></div>
-					<img class="hero-syringe" src="images/l04.png" alt="" />
+					<div class="hero-syringe">
+						<img class="hero-syringe-img" src="images/l04.png" alt="" />
+						<span class="hero-syringe-drip" aria-hidden="true"></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -340,6 +443,11 @@
 				revealTitle.setAttribute("aria-hidden", visible ? "false" : "true");
 			}
 
+			function setDripping(active: boolean) {
+				if (!(syringe instanceof HTMLElement)) return;
+				syringe.classList.toggle("is-dripping", active);
+			}
+
 			function updateSyringe(top: number) {
 				if (!(syringe instanceof HTMLElement)) return;
 				updateSyringeTravel();
@@ -347,7 +455,10 @@
 				const wasActive = syringe.classList.contains("is-active");
 				syringe.classList.toggle("is-active", shouldActive);
 				// Hide as soon as the reverse trip starts.
-				if (wasActive && !shouldActive) setRevealVisible(false);
+				if (wasActive && !shouldActive) {
+					setRevealVisible(false);
+					setDripping(false);
+				}
 			}
 
 			function updateOnScrollOrResize() {
@@ -372,7 +483,10 @@
 					if (!(event instanceof TransitionEvent)) return;
 					if (event.propertyName !== "transform") return;
 					if (event.target !== syringe) return;
-					if (syringe.classList.contains("is-active")) setRevealVisible(true);
+					if (syringe.classList.contains("is-active")) {
+						setRevealVisible(true);
+						setDripping(true);
+					}
 				});
 			}
 
