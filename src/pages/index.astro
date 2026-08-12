@@ -377,14 +377,47 @@
 				color: #000000;
 			}
 
-			.after-subtitle {
+			.after-cta {
 				margin: 0;
-				max-width: 450px;
+				padding: 0.65em 1.25em;
+				border: none;
+				border-radius: 4px;
+				background-color: #ff0000;
+				color: #ffffff;
 				font-family: "Anton SC", sans-serif;
 				font-size: clamp(0.75rem, 2vw + 1rem, 1.5rem);
 				font-weight: 700;
 				line-height: 0.9;
-				color: #ff0000;
+				cursor: pointer;
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			.after-cta__swiper {
+				display: block;
+				overflow: hidden;
+				height: 1.1em;
+			}
+
+			.after-cta__track {
+				display: block;
+				transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.after-cta__label {
+				display: block;
+				letter-spacing: 0.05em;
+				line-height: 1.2;
+			}
+
+			.after-cta:hover .after-cta__track,
+			.after-cta:focus-visible .after-cta__track {
+				transform: translateY(-50%);
+			}
+
+			@media (prefers-reduced-motion: reduce) {
+				.after-cta__track {
+					transition: none;
+				}
 			}
 
 			.after-video {
@@ -493,7 +526,14 @@
 			</div>
 			<div class="after-title-block scroll-fade" aria-hidden="true">
 				<h2 class="after-title">we still have hope...</h2>
-				<p class="after-subtitle">ਜਾਗ ਪੰਜਾਬ</p>
+				<button class="after-cta" type="button" aria-label="ਜਾਗ ਪੰਜਾਬ — WAKE UP PUNJAB">
+					<span class="after-cta__swiper">
+						<span class="after-cta__track">
+							<span class="after-cta__label">ਜਾਗ ਪੰਜਾਬ</span>
+							<span class="after-cta__label">WAKE UP PUNJAB</span>
+						</span>
+					</span>
+				</button>
 			</div>
 		</section>
 		<script>
