@@ -210,6 +210,11 @@
 				height: 0;
 				pointer-events: none;
 				rotate: 232deg;
+				--drip-cycle: 3.9s;
+				/* Nudge fall vs bead; positive = fall starts later. */
+				--drip-fall-delay: 0s;
+				/* Fall motion speed reference (36% of this ≈ 0.94s of travel). */
+				--drip-fall-motion: 2.6s;
 			}
 
 			.hero-syringe-drip::before,
@@ -241,11 +246,16 @@
 			}
 
 			.hero-syringe.is-dripping .hero-syringe-drip::before {
-				animation: syringe-drip-bead 2.6s ease-in-out infinite;
+				animation: syringe-drip-bead var(--drip-cycle) ease-out infinite;
 			}
 
 			.hero-syringe.is-dripping .hero-syringe-drip::after {
-				animation: syringe-drip-fall 2.6s ease-in infinite;
+				/*
+				 * Matches bead loop length; delay offsets fall after bead detach.
+				 * Fall motion keeps 2.6s speed (64%–88% of the cycle).
+				 */
+				animation: syringe-drip-fall var(--drip-cycle) ease-in var(--drip-fall-delay)
+					infinite;
 			}
 
 			@keyframes syringe-drip-bead {
@@ -275,21 +285,22 @@
 
 			@keyframes syringe-drip-fall {
 				0%,
-				60% {
+				64% {
 					opacity: 0;
-					transform: translate(-50%, -50%) scale(0.6);
+					transform: translate(-50%, -30%) scale(1);
 				}
 
-				64% {
+				64.01% {
 					opacity: 1;
 					transform: translate(-50%, -30%) scale(1);
 				}
 
-				82% {
+				76% {
 					opacity: 0.75;
 					transform: translate(-50%, calc(-30% + 2.8em)) scale(0.95, 1.1);
 				}
 
+				88%,
 				100% {
 					opacity: 0;
 					transform: translate(-50%, calc(-30% + 4.5em)) scale(0.85, 1.2);
