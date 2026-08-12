@@ -126,6 +126,19 @@
 				pointer-events: auto;
 			}
 
+			/* Generic scroll-fade utility (opacity only) */
+			.scroll-fade {
+				opacity: 0;
+				transition: opacity 0.45s ease;
+				will-change: opacity;
+				pointer-events: none;
+			}
+
+			.scroll-fade.is-visible {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
 			/* Full-bleed fixed layer; art lives in the centered stage. */
 			.hero-stack {
 				position: fixed;
@@ -449,8 +462,10 @@
 		</section>
 
 		<section class="after-section">
-			<h2 class="after-title">HEAR THE STORIES OF LIVES AFFECTED BY THIS VICE</h2>
-			<div class="after-video">
+			<h2 class="after-title scroll-fade" aria-hidden="true">
+				HEAR THE STORIES OF LIVES AFFECTED BY THIS VICE
+			</h2>
+			<div class="after-video scroll-fade" aria-hidden="true">
 				<iframe
 					src="https://www.youtube.com/embed/g9Gn7R7XKfw"
 					title="YouTube video"
@@ -459,13 +474,14 @@
 					allowfullscreen
 				></iframe>
 			</div>
-			<h2 class="after-title">we still have hope...</h2>
+			<h2 class="after-title scroll-fade" aria-hidden="true">we still have hope...</h2>
 		</section>
 		<script>
 			const bottomSection = document.querySelector(".bottom-section");
 			const syringe = document.querySelector(".hero-syringe");
 			const syringeAnchor = document.querySelector(".hero-syringe-anchor");
 			const revealTitle = document.querySelector(".reveal-title-container");
+			const scrollFadeElements = document.querySelectorAll(".scroll-fade");
 			const root = document.documentElement;
 			const SYRINGE_TRIGGER_PX = 300;
 
@@ -499,6 +515,12 @@
 				if (!(revealTitle instanceof HTMLElement)) return;
 				revealTitle.classList.toggle("is-visible", visible);
 				revealTitle.setAttribute("aria-hidden", visible ? "false" : "true");
+			}
+
+			function setScrollFadeVisible(element: Element, visible: boolean) {
+				if (!(element instanceof HTMLElement)) return;
+				element.classList.toggle("is-visible", visible);
+				element.setAttribute("aria-hidden", visible ? "false" : "true");
 			}
 
 			function setDripping(active: boolean) {
@@ -622,6 +644,47 @@
 			}
 
 			initSmoothScroll();
+
+			// Reveal `.scroll-fade` elements when they enter the viewport.
+			(function initScrollFade() {
+				if (!scrollFadeElements.length) return;
+
+				const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+				if (reducedMotion.matches) {
+					scrollFadeElements.forEach((el) => setScrollFadeVisible(el, true));
+					return;
+				}
+
+				if (typeof IntersectionObserver === "undefined") {
+					const onScroll = () => {
+						const viewportH = window.innerHeight;
+						scrollFadeElements.forEach((el) => {
+							if (!(el instanceof HTMLElement)) return;
+							const rect = el.getBoundingClientRect();
+							const visible =
+								rect.top < viewportH * 0.85 && rect.bottom > viewportH * 0.15;
+							setScrollFadeVisible(el, visible);
+						});
+					};
+					onScroll();
+					window.addEventListener("scroll", onScroll, { passive: true });
+					window.addEventListener("resize", onScroll);
+					return;
+				}
+
+				const observer = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (!entry.isIntersecting) continue;
+							setScrollFadeVisible(entry.target, true);
+							observer.unobserve(entry.target);
+						}
+					},
+					{ threshold: 0.15 },
+				);
+
+				scrollFadeElements.forEach((el) => observer.observe(el));
+			})();
 		</script>
 	</body>
 </html>
