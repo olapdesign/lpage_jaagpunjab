@@ -430,6 +430,9 @@
 				max-width: min(6rem, 40rem);
 				transform: translateY(-10%);
 				pointer-events: none;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
 				font-family: Verdana, Geneva, sans-serif;
 				font-size: clamp(0.85rem, 1.2vw + 0.55rem, 1.05rem);
 				font-style: italic;
@@ -438,9 +441,7 @@
 			}
 
 			.after-cta-hint__text {
-				display: flex;
-				flex-direction: column;
-				align-items: flex-end;
+				display: block;
 				animation: cta-hint-jump 1.6s ease-in-out infinite;
 			}
 
@@ -615,44 +616,42 @@
 						</span>
 					</button>
 					<p class="after-cta-hint">
-						<span class="after-cta-hint__text">
-							<svg
-								class="after-cta-hint__arrow"
-								viewBox="0 0 64 32"
-								aria-hidden="true"
-								fill="none"
-							>
-								<defs>
-									<marker
-										id="after-cta-hint-arrowhead"
-										markerWidth="7"
-										markerHeight="7"
-										refX="6"
-										refY="3.5"
-										orient="auto"
-										markerUnits="strokeWidth"
-									>
-										<path
-											d="M0,0 L6,3.5 L0,7"
-											stroke="currentColor"
-											stroke-width="1.2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										></path>
-									</marker>
-								</defs>
-								<path
-									d="M 58 26 C 44 10, 24 6, 8 14"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-dasharray="3.5 3"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									marker-end="url(#after-cta-hint-arrowhead)"
-								></path>
-							</svg>
-							Click to show your support
-						</span>
+						<svg
+							class="after-cta-hint__arrow"
+							viewBox="0 0 64 32"
+							aria-hidden="true"
+							fill="none"
+						>
+							<defs>
+								<marker
+									id="after-cta-hint-arrowhead"
+									markerWidth="7"
+									markerHeight="7"
+									refX="6"
+									refY="3.5"
+									orient="auto"
+									markerUnits="strokeWidth"
+								>
+									<path
+										d="M0,0 L6,3.5 L0,7"
+										stroke="currentColor"
+										stroke-width="1.2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									></path>
+								</marker>
+							</defs>
+							<path
+								d="M 58 26 C 44 10, 24 6, 8 14"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-dasharray="3.5 3"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								marker-end="url(#after-cta-hint-arrowhead)"
+							></path>
+						</svg>
+						<span class="after-cta-hint__text">Click to show your support</span>
 					</p>
 				</div>
 			</div>
