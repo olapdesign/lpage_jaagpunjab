@@ -43,6 +43,10 @@
 				box-sizing: border-box;
 			}
 
+			html {
+				overscroll-behavior-y: none;
+			}
+
 			html,
 			body {
 				margin: 0;
@@ -514,6 +518,77 @@
 			updateOnScrollOrResize();
 			window.addEventListener("scroll", onScrollOrResize, { passive: true });
 			window.addEventListener("resize", onScrollOrResize);
+
+			function initSmoothScroll() {
+				const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+				if (reducedMotion.matches) return;
+
+				let current = window.scrollY;
+				let target = window.scrollY;
+				let lastTime = 0;
+				let raf = 0;
+				// Lower = longer coast after the wheel stops.
+				const lambda = 4;
+
+				function maxScroll() {
+					return Math.max(
+						0,
+						document.documentElement.scrollHeight - window.innerHeight,
+					);
+				}
+
+				function clamp(value: number) {
+					return Math.max(0, Math.min(value, maxScroll()));
+				}
+
+				function start(time = performance.now()) {
+					if (raf) return;
+					lastTime = time;
+					raf = requestAnimationFrame(tick);
+				}
+
+				function tick(now: number) {
+					const dt = Math.min(64, now - lastTime);
+					lastTime = now;
+					target = clamp(target);
+					const alpha = 1 - Math.exp((-lambda * dt) / 1000);
+					current += (target - current) * alpha;
+
+					if (Math.abs(target - current) < 0.15) {
+						current = target;
+						window.scrollTo(0, current);
+						raf = 0;
+						return;
+					}
+
+					window.scrollTo(0, current);
+					raf = requestAnimationFrame(tick);
+				}
+
+				function onWheel(event: WheelEvent) {
+					if (event.ctrlKey) return;
+					event.preventDefault();
+
+					let delta = event.deltaY;
+					if (event.deltaMode === 1) delta *= 16;
+					else if (event.deltaMode === 2) delta *= window.innerHeight;
+
+					target = clamp(target + delta);
+					start();
+				}
+
+				function onNativeScroll() {
+					const y = window.scrollY;
+					if (Math.abs(y - current) < 2) return;
+					current = y;
+					target = y;
+				}
+
+				window.addEventListener("wheel", onWheel, { passive: false });
+				window.addEventListener("scroll", onNativeScroll, { passive: true });
+			}
+
+			initSmoothScroll();
 		</script>
 	</body>
 </html>
