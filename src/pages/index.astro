@@ -438,8 +438,19 @@
 			}
 
 			.after-cta-hint__text {
-				display: block;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
 				animation: cta-hint-jump 1.6s ease-in-out infinite;
+			}
+
+			.after-cta-hint__arrow {
+				display: block;
+				width: 3.75rem;
+				height: auto;
+				margin: 0 0 0.3rem;
+				overflow: visible;
+				transform: translateX(-70%);
 			}
 
 			@keyframes cta-hint-jump {
@@ -604,7 +615,44 @@
 						</span>
 					</button>
 					<p class="after-cta-hint">
-						<span class="after-cta-hint__text">Click here to show your support</span>
+						<span class="after-cta-hint__text">
+							<svg
+								class="after-cta-hint__arrow"
+								viewBox="0 0 64 32"
+								aria-hidden="true"
+								fill="none"
+							>
+								<defs>
+									<marker
+										id="after-cta-hint-arrowhead"
+										markerWidth="7"
+										markerHeight="7"
+										refX="6"
+										refY="3.5"
+										orient="auto"
+										markerUnits="strokeWidth"
+									>
+										<path
+											d="M0,0 L6,3.5 L0,7"
+											stroke="currentColor"
+											stroke-width="1.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										></path>
+									</marker>
+								</defs>
+								<path
+									d="M 58 26 C 44 10, 24 6, 8 14"
+									stroke="currentColor"
+									stroke-width="1.5"
+									stroke-dasharray="3.5 3"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									marker-end="url(#after-cta-hint-arrowhead)"
+								></path>
+							</svg>
+							Click to show your support
+						</span>
 					</p>
 				</div>
 			</div>
