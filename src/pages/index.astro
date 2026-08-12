@@ -416,9 +416,59 @@
 				transform: translateY(-50%);
 			}
 
+			.after-cta-anchor {
+				position: relative;
+				display: inline-block;
+			}
+
+			.after-cta-hint {
+				position: absolute;
+				left: calc(100% + 1.25rem);
+				top: 50%;
+				margin: 0;
+				width: max-content;
+				max-width: min(6rem, 40rem);
+				transform: translateY(-10%);
+				pointer-events: none;
+				font-family: Georgia, "Times New Roman", serif;
+				font-size: clamp(0.85rem, 1.2vw + 0.55rem, 1.05rem);
+				font-style: italic;
+				line-height: 1.25;
+				color: #7e7e7e;
+			}
+
+			.after-cta-hint__text {
+				display: block;
+				animation: cta-hint-jump 1.6s ease-in-out infinite;
+			}
+
+			@keyframes cta-hint-jump {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				30% {
+					transform: translateY(-0.45em);
+				}
+				50% {
+					transform: translateY(0);
+				}
+				70% {
+					transform: translateY(-0.2em);
+				}
+			}
+
 			@media (prefers-reduced-motion: reduce) {
 				.after-cta__track {
 					transition: none;
+				}
+
+				.after-cta-hint {
+					animation: none;
+				}
+
+				.after-cta-hint__text {
+					animation: none;
 				}
 			}
 
@@ -544,14 +594,19 @@
 			</div>
 			<div class="after-title-block scroll-fade" aria-hidden="true">
 				<h2 class="after-title">we still have hope...</h2>
-				<button class="after-cta" type="button" aria-label="ਜਾਗ ਪੰਜਾਬ — WAKE UP PUNJAB">
-					<span class="after-cta__swiper">
-						<span class="after-cta__track">
-							<span class="after-cta__label">ਜਾਗ ਪੰਜਾਬ</span>
-							<span class="after-cta__label">WAKE UP PUNJAB</span>
+				<div class="after-cta-anchor">
+					<button class="after-cta" type="button" aria-label="ਜਾਗ ਪੰਜਾਬ — WAKE UP PUNJAB">
+						<span class="after-cta__swiper">
+							<span class="after-cta__track">
+								<span class="after-cta__label">ਜਾਗ ਪੰਜਾਬ</span>
+								<span class="after-cta__label">WAKE UP PUNJAB</span>
+							</span>
 						</span>
-					</span>
-				</button>
+					</button>
+					<p class="after-cta-hint">
+						<span class="after-cta-hint__text">Click here to show your support</span>
+					</p>
+				</div>
 			</div>
 		</section>
 		<script>
